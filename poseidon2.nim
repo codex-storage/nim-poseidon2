@@ -1,10 +1,10 @@
 
 # import std/sugar
 
-import 
-  ../constantine/constantine/math/arithmetic,
-  ../constantine/constantine/math/io/io_fields,
-  ../constantine/constantine/math/config/curves
+import
+  constantine/math/arithmetic,
+  constantine/math/io/io_fields,
+  constantine/math/config/curves
 
 import types
 import roundconst
