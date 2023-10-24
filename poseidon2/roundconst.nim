@@ -2,7 +2,7 @@
 
 #-------------------------------------------------------------------------------
 
-let externalRoundConstStr* : array[24, string] =
+const externalRoundConstStr* : array[24, string] =
   [ "0x2c4c51fd1bb9567c27e99f5712b49e0574178b41b6f0a476cddc41d242cf2b43" ,
     "0x1c5f8d18acb9c61ec6fcbfcda5356f1b3fdee7dc22c99a5b73a2750e5b054104" ,
     "0x2d3c1988b4541e4c045595b8d574e98a7c2820314a82e67a4e380f1c4541ba90" ,
@@ -38,7 +38,7 @@ let externalRoundConstStr* : array[24, string] =
 
 #-------------------------------------------------------------------------------
 
-let internalRoundConstStr* : array[56, string] =
+const internalRoundConstStr* : array[56, string] =
   [ "0x15ce7e5ae220e8623a40b3a3b22d441eff0c9be1ae1d32f1b777af84eea7e38c" ,
     "0x1bf60ac8bfff0f631983c93e218ca0d4a4059c254b4299b1d9984a07edccfaf0" ,
     "0x0fab0c9387cb2bec9dc11b2951088b9e1e1d2978542fc131f74a8f8fdac95b40" ,
