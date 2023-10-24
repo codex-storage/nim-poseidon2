@@ -14,7 +14,7 @@ suite "poseidon2":
     var y: F = toF(1)
     var z: F = toF(2)
 
-    perm_inplace(x, y, z)
+    permInplace(x, y, z)
 
     check toDecimal(x) == "21882471761025344482456282050943515707267606647948403374880378562101343146243"
     check toDecimal(y) == "09030699330013392132529464674294378792132780497765201297316864012141442630280"
@@ -27,6 +27,6 @@ suite "poseidon2":
     for i in 1..n:
       xs.add( toF(i) )
 
-    let root = merkle_root(xs)
+    let root = merkleRoot(xs)
     check toHex(root) == "0x1eabbb64b76d5aecd393601c4a01878450e23f45fe8b2748bb63a615351b11d1"
 

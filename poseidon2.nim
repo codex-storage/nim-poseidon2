@@ -13,8 +13,8 @@ import poseidon2/roundconst
 
 let zero : F = getZero()
 
-let external_round_const : array[24, F] = arrayFromHex( external_round_const_str )
-let internal_round_const : array[56, F] = arrayFromHex( internal_round_const_str )
+let externalRoundConst : array[24, F] = arrayFromHex( externalRoundConstStr )
+let internalRoundConst : array[56, F] = arrayFromHex( internalRoundConstStr )
 
 #-------------------------------------------------------------------------------
 
@@ -25,14 +25,14 @@ proc sbox(x: var F) : void =
   square(y)
   x *= y
 
-proc linear_layer(x, y, z : var F) =
+proc linearLayer(x, y, z : var F) =
   var s = x ; s += y ; s += z
   x += s
   y += s
   z += s
 
-proc internal_round(j: int; x, y, z: var F) =
-  x += internal_round_const[j]
+proc internalRound(j: int; x, y, z: var F) =
+  x += internalRoundConst[j]
   sbox(x)
   var s = x ; s += y ;  s += z
   double(z)
@@ -40,28 +40,28 @@ proc internal_round(j: int; x, y, z: var F) =
   y += s
   z += s
 
-proc external_round(j: int; x, y, z : var F) =
-  x += external_round_const[3*j+0]
-  y += external_round_const[3*j+1]
-  z += external_round_const[3*j+2]
+proc externalRound(j: int; x, y, z : var F) =
+  x += externalRoundConst[3*j+0]
+  y += externalRoundConst[3*j+1]
+  z += externalRoundConst[3*j+2]
   sbox(x) ; sbox(y) ; sbox(z)
   var s = x ; s += y ; s += z
   x += s
   y += s
   z += s
 
-proc perm_inplace*(x, y, z : var F) =
-  linear_layer(x, y, z);
+proc permInplace*(x, y, z : var F) =
+  linearLayer(x, y, z);
   for j in 0..3:
-    external_round(j, x, y, z)
+    externalRound(j, x, y, z)
   for j in 0..55:
-    internal_round(j, x, y, z)
+    internalRound(j, x, y, z)
   for j in 4..7:
-    external_round(j, x, y, z)
+    externalRound(j, x, y, z)
 
 proc perm*(xyz: S) : S =
   var (x,y,z) = xyz
-  perm_inplace(x, y, z)
+  permInplace(x, y, z)
   return (x,y,z)
 
 #-------------------------------------------------------------------------------
@@ -70,10 +70,10 @@ proc compress*(a, b : F) : F =
   var x = a
   var y = b
   var z : F ; setZero(z)
-  perm_inplace(x, y, z)
+  permInplace(x, y, z)
   return x
 
-proc merkle_root*(xs: openArray[F]) : F =
+proc merkleRoot*(xs: openArray[F]) : F =
   let a = low(xs)
   let b = high(xs)
   let m = b-a+1
@@ -84,11 +84,11 @@ proc merkle_root*(xs: openArray[F]) : F =
   else:
     let halfn  : int  = m div 2
     let n      : int  = 2*halfn
-    let is_odd : bool = (n != m)
+    let isOdd : bool = (n != m)
 
     var ys : seq[F] = newSeq[F](halfn)
 
-    if not is_odd:
+    if not isOdd:
       for i in 0..<halfn:
         ys[i] = compress( xs[a+2*i], xs[a+2*i+1] )
 
@@ -98,7 +98,7 @@ proc merkle_root*(xs: openArray[F]) : F =
       # and the last one:
       ys[halfn-1] = compress( xs[a+n-2], zero )
 
-    return merkle_root(ys)
+    return merkleRoot(ys)
 
 #-------------------------------------------------------------------------------
 
