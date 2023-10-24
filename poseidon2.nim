@@ -13,8 +13,8 @@ import poseidon2/roundconst
 
 let zero : F = getZero()
 
-let externalRoundConst : array[24, F] = arrayFromHex( externalRoundConstStr )
-let internalRoundConst : array[56, F] = arrayFromHex( internalRoundConstStr )
+const externalRoundConst : array[24, F] = arrayFromHex( externalRoundConstStr )
+const internalRoundConst : array[56, F] = arrayFromHex( internalRoundConstStr )
 
 #-------------------------------------------------------------------------------
 
