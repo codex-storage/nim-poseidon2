@@ -17,17 +17,17 @@ func getZero*() : F =
   setZero(z)
   return z
 
-func toF*(a: int) : F = 
+func toF*(a: int) : F =
   var y : F
   fromInt(y, a);
   return y
 
-func hexToF*(s : string) : F = 
+func hexToF*(s : string) : F =
   var y : F
   fromHex(y, s)
   return y
 
-func arrayFromHex*[N]( inp: array[N, string]) : array[N, F] = 
+func arrayFromHex*[N]( inp: array[N, string]) : array[N, F] =
   var tmp : array[N, F]
   for i in low(inp)..high(inp):
     tmp[i] = hexToF( inp[i] )
