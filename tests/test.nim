@@ -1,8 +1,8 @@
 
 import std/math
 
-import ../constantine/constantine/math/io/io_fields
-import ../constantine/constantine/math/config/curves
+import constantine/math/io/io_fields
+import constantine/math/config/curves
 
 import types
 import posei2
