@@ -2,7 +2,7 @@
 
 #-------------------------------------------------------------------------------
 
-let external_round_const_str* : array[24, string] =
+let externalRoundConstStr* : array[24, string] =
   [ "0x2c4c51fd1bb9567c27e99f5712b49e0574178b41b6f0a476cddc41d242cf2b43" ,
     "0x1c5f8d18acb9c61ec6fcbfcda5356f1b3fdee7dc22c99a5b73a2750e5b054104" ,
     "0x2d3c1988b4541e4c045595b8d574e98a7c2820314a82e67a4e380f1c4541ba90" ,
@@ -30,7 +30,7 @@ let external_round_const_str* : array[24, string] =
     "0x07a0693ff41476abb4664f3442596aa8399fdccf245d65882fce9a37c268aa04" ,
     "0x11eb49b07d33de2bd60ea68e7f652beda15644ed7855ee5a45763b576d216e8e" ,
     "0x08f8887da6ce51a8c06041f64e22697895f34bacb8c0a39ec12bf597f7c67cfc" ,
-  #  
+  #
     "0x2a912ec610191eb7662f86a52cc64c0122bd5ba762e1db8da79b5949fdd38092" ,
     "0x2031d7fd91b80857aa1fef64e23cfad9a9ba8fe8c8d09de92b1edb592a44c290" ,
     "0x0f81ebce43c47711751fa64d6c007221016d485641c28c507d04fd3dc7fba1d2" ,
@@ -38,7 +38,7 @@ let external_round_const_str* : array[24, string] =
 
 #-------------------------------------------------------------------------------
 
-let internal_round_const_str* : array[56, string] =
+let internalRoundConstStr* : array[56, string] =
   [ "0x15ce7e5ae220e8623a40b3a3b22d441eff0c9be1ae1d32f1b777af84eea7e38c" ,
     "0x1bf60ac8bfff0f631983c93e218ca0d4a4059c254b4299b1d9984a07edccfaf0" ,
     "0x0fab0c9387cb2bec9dc11b2951088b9e1e1d2978542fc131f74a8f8fdac95b40" ,
@@ -94,7 +94,7 @@ let internal_round_const_str* : array[56, string] =
     "0x1b8c1252a5888f8cb2672effb5df49c633d3fd7183271488a1c40d0f88e7636e" ,
     "0x0f45697130f5498e2940568ef0d5e9e16b1095a6cdbb6411df20a973c605e70b" ,
     "0x0780ccc403cdd68983acbd34cda41cacfb2cf911a93076bc25587b4b0aed4929" ,
-    "0x238d26ca97c691591e929f32199a643550f325f23a85d420080b289d7cecc9d4" 
+    "0x238d26ca97c691591e929f32199a643550f325f23a85d420080b289d7cecc9d4"
   ]
 
 #-------------------------------------------------------------------------------
