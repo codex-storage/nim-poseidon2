@@ -4,8 +4,8 @@ import std/math
 import constantine/math/io/io_fields
 import constantine/math/config/curves
 
-import types
-import posei2
+import poseidon2/types
+import poseidon2
 
 #-------------------------------------------------------------------------------
 

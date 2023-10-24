@@ -6,8 +6,8 @@ import
   constantine/math/io/io_fields,
   constantine/math/config/curves
 
-import types
-import roundconst
+import poseidon2/types
+import poseidon2/roundconst
 
 #-------------------------------------------------------------------------------
 
