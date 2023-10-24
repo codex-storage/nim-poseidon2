@@ -36,7 +36,7 @@ proc internal_round(j: int; x, y, z: var F) =
   sbox(x)
   var s = x ; s += y ;  s += z
   double(z)
-  x += s 
+  x += s
   y += s
   z += s
 
@@ -73,7 +73,7 @@ proc compress*(a, b : F) : F =
   perm_inplace(x, y, z)
   return x
 
-proc merkle_root*(xs: openArray[F]) : F = 
+proc merkle_root*(xs: openArray[F]) : F =
   let a = low(xs)
   let b = high(xs)
   let m = b-a+1
@@ -85,7 +85,7 @@ proc merkle_root*(xs: openArray[F]) : F =
     let halfn  : int  = m div 2
     let n      : int  = 2*halfn
     let is_odd : bool = (n != m)
-  
+
     var ys : seq[F] = newSeq[F](halfn)
 
     if not is_odd:
@@ -101,6 +101,6 @@ proc merkle_root*(xs: openArray[F]) : F =
     return merkle_root(ys)
 
 #-------------------------------------------------------------------------------
-  
+
 
 
