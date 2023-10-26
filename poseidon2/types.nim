@@ -1,6 +1,7 @@
 
 import
   constantine/math/io/io_fields,
+  constantine/math/io/io_bigints,
   constantine/math/arithmetic,
   constantine/math/config/curves
 
@@ -22,15 +23,14 @@ func toF*(a: int) : F =
   fromInt(y, a);
   return y
 
-func hexToF*(s : string) : F =
-  var y : F
-  fromHex(y, s)
-  return y
+func hexToF*(s : string, endian: static Endianness = bigEndian) : F =
+  let bigint = B.fromHex(s, endian)
+  return F.fromBig(bigint)
 
-func arrayFromHex*[N]( inp: array[N, string]) : array[N, F] =
+func arrayFromHex*[N](
+    inp: array[N, string],
+    endian: static Endianness = bigEndian) : array[N, F] =
   var tmp : array[N, F]
   for i in low(inp)..high(inp):
-    tmp[i] = hexToF( inp[i] )
+    tmp[i] = hexToF(inp[i], endian)
   return tmp
-
-#-------------------------------------------------------------------------------

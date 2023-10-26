@@ -3,7 +3,7 @@
 
 import
   constantine/math/arithmetic,
-  constantine/math/io/io_fields,
+  constantine/math/io/io_bigints,
   constantine/math/config/curves
 
 import poseidon2/types
@@ -100,7 +100,20 @@ proc merkleRoot*(xs: openArray[F]) : F =
 
     return merkleRoot(ys)
 
-#-------------------------------------------------------------------------------
+proc unmarshal(
+        _: type F,
+        bytes: openArray[byte],
+        endian: static Endianness): seq[F] =
+  const chunkLen = 31
+  var elements: seq[F]
+  var i = 0
+  while i < bytes.len:
+    let chunk = bytes[i..<min(i + chunkLen, bytes.len)]
+    let bigint = B.unmarshal(chunk, endian)
+    let element = F.fromBig(bigint)
+    elements.add(element)
+    i += chunkLen
+  return elements
 
-
-
+proc merkleRoot*(bytes: openArray[byte]): F =
+  merkleRoot(F.unmarshal(bytes, littleEndian))
