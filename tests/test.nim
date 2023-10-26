@@ -1,7 +1,10 @@
 import std/unittest
 import std/math
+import std/strutils
 
+import constantine/math/arithmetic
 import constantine/math/io/io_fields
+import constantine/math/io/io_bigints
 import constantine/math/config/curves
 
 import poseidon2/types
@@ -20,7 +23,7 @@ suite "poseidon2":
     check toDecimal(y) == "09030699330013392132529464674294378792132780497765201297316864012141442630280"
     check toDecimal(z) == "09137931384593657624554037900714196568304064431583163402259937475584578975855"
 
-  test "merkle root":
+  test "merkle root of field elements":
     let m = 17
     let n = 2^m
     var xs: seq[F]
@@ -30,3 +33,32 @@ suite "poseidon2":
     let root = merkleRoot(xs)
     check toHex(root) == "0x1eabbb64b76d5aecd393601c4a01878450e23f45fe8b2748bb63a615351b11d1"
 
+  test "merkle root of bytes":
+    let hex = [ # 31 bytes per field element
+      "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E",
+      "1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D",
+      "3E3F404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C"
+    ]
+    let padded = [ # padded to 32 bytes
+      hex[0] & "00",
+      hex[1] & "00",
+      hex[2] & "00"
+    ]
+    let bytes = cast[seq[byte]](parseHexStr(hex.join()))
+    let elements = arrayFromHex(padded, littleEndian)
+    check merkleRoot(bytes).toHex == merkleRoot(elements).toHex
+
+  test "merkle root of bytes whose length is not a not multiple of 31":
+    let hex = [ # 31 bytes per field element
+      "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E",
+      "1F202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D",
+      "3E3F404142434445464748494A4B4C4D4E4F505152535455565758"
+    ]
+    let padded = [ # padded to 32 bytes
+      hex[0] & "00",
+      hex[1] & "00",
+      hex[2] & "0000000000"
+    ]
+    let bytes = cast[seq[byte]](parseHexStr(hex.join()))
+    let elements = arrayFromHex(padded, littleEndian)
+    check merkleRoot(bytes).toHex == merkleRoot(elements).toHex
