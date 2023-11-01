@@ -8,7 +8,7 @@ import poseidon2/io
 
 #-------------------------------------------------------------------------------
 
-let zero : F = getZero()
+const zero : F = getZero()
 
 const externalRoundConst : array[24, F] = arrayFromHex( externalRoundConstStr )
 const internalRoundConst : array[56, F] = arrayFromHex( internalRoundConstStr )
@@ -16,19 +16,19 @@ const internalRoundConst : array[56, F] = arrayFromHex( internalRoundConstStr )
 #-------------------------------------------------------------------------------
 
 # inplace sbox, x => x^5
-proc sbox(x: var F) : void =
+func sbox(x: var F) : void =
   var y = x
   square(y)
   square(y)
   x *= y
 
-proc linearLayer(x, y, z : var F) =
+func linearLayer(x, y, z : var F) =
   var s = x ; s += y ; s += z
   x += s
   y += s
   z += s
 
-proc internalRound(j: int; x, y, z: var F) =
+func internalRound(j: int; x, y, z: var F) =
   x += internalRoundConst[j]
   sbox(x)
   var s = x ; s += y ;  s += z
@@ -37,7 +37,7 @@ proc internalRound(j: int; x, y, z: var F) =
   y += s
   z += s
 
-proc externalRound(j: int; x, y, z : var F) =
+func externalRound(j: int; x, y, z : var F) =
   x += externalRoundConst[3*j+0]
   y += externalRoundConst[3*j+1]
   z += externalRoundConst[3*j+2]
@@ -47,7 +47,7 @@ proc externalRound(j: int; x, y, z : var F) =
   y += s
   z += s
 
-proc permInplace*(x, y, z : var F) =
+func permInplace*(x, y, z : var F) =
   linearLayer(x, y, z);
   for j in 0..3:
     externalRound(j, x, y, z)
@@ -56,21 +56,21 @@ proc permInplace*(x, y, z : var F) =
   for j in 4..7:
     externalRound(j, x, y, z)
 
-proc perm*(xyz: S) : S =
+func perm*(xyz: S) : S =
   var (x,y,z) = xyz
   permInplace(x, y, z)
   return (x,y,z)
 
 #-------------------------------------------------------------------------------
 
-proc compress*(a, b : F) : F =
+func compress*(a, b : F) : F =
   var x = a
   var y = b
   var z : F ; setZero(z)
   permInplace(x, y, z)
   return x
 
-proc merkleRoot*(xs: openArray[F]) : F =
+func merkleRoot*(xs: openArray[F]) : F =
   let a = low(xs)
   let b = high(xs)
   let m = b-a+1
@@ -97,5 +97,5 @@ proc merkleRoot*(xs: openArray[F]) : F =
 
     return merkleRoot(ys)
 
-proc merkleRoot*(bytes: openArray[byte]): F =
+func merkleRoot*(bytes: openArray[byte]): F =
   merkleRoot(F.unmarshal(bytes, littleEndian))

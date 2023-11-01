@@ -2,7 +2,7 @@ import ./types
 import constantine/math/arithmetic
 import constantine/math/io/io_bigints
 
-proc unmarshal*(
+func unmarshal*(
         _: type F,
         bytes: openArray[byte],
         endian: static Endianness): seq[F] =
