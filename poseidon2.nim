@@ -6,6 +6,8 @@ import poseidon2/types
 import poseidon2/roundconst
 import poseidon2/io
 
+export toBytes
+
 #-------------------------------------------------------------------------------
 
 const zero : F = getZero()
