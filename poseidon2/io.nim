@@ -1,6 +1,7 @@
 import ./types
 import constantine/math/arithmetic
 import constantine/math/io/io_bigints
+import constantine/math/config/curves
 
 func unmarshal*(_: type F, bytes: openArray[byte]): F =
   ## Converts bytes into a field element. The byte array is interpreted as a
@@ -25,3 +26,9 @@ func unmarshal*(_: type seq[F], bytes: openArray[byte]): seq[F] =
     elements.add(element)
     chunkStart += chunkLen
   return elements
+
+func marshal*(element: F): array[32, byte] =
+  ## Converts a field element into its canonical representation in little-endian
+  ## byte order. Uses at most 254 bits, the remaining 6 most-significant bits
+  ## are set to 0.
+  assert marshal(result, element.toBig(), littleEndian)
