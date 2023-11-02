@@ -33,3 +33,9 @@ suite "unmarshalling":
     check bool(elements[1] == expected2)
     check bool(elements[2] == expected3)
 
+  test "converts field element into little-endian bytes":
+    var element: F
+    setMinusOne(element) # largest element in the field
+    var expected: array[32, byte]
+    marshal(expected, element.toBig(), littleEndian)
+    check element.marshal() == expected
