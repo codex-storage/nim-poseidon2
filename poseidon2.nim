@@ -98,4 +98,4 @@ func merkleRoot*(xs: openArray[F]) : F =
     return merkleRoot(ys)
 
 func merkleRoot*(bytes: openArray[byte]): F =
-  merkleRoot(seq[F].unmarshal(bytes))
+  merkleRoot(seq[F].fromBytes(bytes))
