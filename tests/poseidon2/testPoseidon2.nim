@@ -5,7 +5,7 @@ import std/sequtils
 import constantine/math/arithmetic
 import constantine/math/io/io_fields
 import constantine/math/io/io_bigints
-import constantine/math/config/curves
+import constantine/serialization/codecs
 
 import poseidon2/types
 import poseidon2
@@ -31,9 +31,14 @@ suite "poseidon2":
       xs.add( toF(i) )
 
     let root = merkleRoot(xs)
-    check root.toHex == "0x1eabbb64b76d5aecd393601c4a01878450e23f45fe8b2748bb63a615351b11d1"
+    check root.toHex(littleEndian) == "0xd1111b3515a663bb48278bfe453fe2508487014a1c6093d3ec5a6db764bbab1e"
 
   test "merkle root of bytes":
     let bytes = toSeq 1'u8..80'u8
     let root = merkleRoot(bytes)
-    check root.toHex == "0x2d2d6f27d20a9e5597e20a888a4deac0e0600f92f0b9691ace0fdfab2fc1f500"
+    check root.toHex(littleEndian) == "0x00f5c12fabdf0fce1a69b9f0920f60e0c0ea4d8a880ae297559e0ad2276f2d2d"
+
+  test "merkle root of bytes converted to bytes":
+    let bytes = toSeq 1'u8..80'u8
+    let rootAsBytes = merkleRoot(bytes).toBytes()
+    check rootAsBytes.toHex == "0x00f5c12fabdf0fce1a69b9f0920f60e0c0ea4d8a880ae297559e0ad2276f2d2d"
