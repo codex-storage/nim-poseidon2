@@ -34,7 +34,7 @@ func spongeWithRate1*(xs: openArray[F]) : F =
 
   var s0 : F = zero
   var s1 : F = zero
-  var s2 : F = zero
+  var s2 : F = toF(0x0301) ; s2 += twoToThe64        # domain separation IV := (2^64 + 256*t + r)
 
   for x in xs:
     s0 += x
@@ -54,7 +54,7 @@ func spongeWithRate2*(xs: openArray[F]) : F =
 
   var s0 : F = zero
   var s1 : F = zero
-  var s2 : F = zero
+  var s2 : F = toF(0x0302) ; s2 += twoToThe64        # domain separation IV := (2^64 + 256*t + r)
 
   for i in 0..<halfn:
     s0 += xs[a+2*i  ]

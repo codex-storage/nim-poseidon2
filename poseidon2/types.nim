@@ -29,6 +29,8 @@ func toF*(a: int) : F =
 const zero* : F = getZero()
 const one*  : F = fromHex(F,"0x01")     # note: `fromUint()` does not work at compile time
 
+const twoToThe64* : F = fromHex(F,"0x10000000000000000")
+
 #-------------------------------------------------------------------------------
 
 func hexToF*(s : string, endian: static Endianness = bigEndian) : F =
