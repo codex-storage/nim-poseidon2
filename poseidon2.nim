@@ -36,8 +36,8 @@ func spongeWithRate1*(xs: openArray[F]) : F =
   var s1 : F = zero
   var s2 : F = zero
 
-  for i in 0..<n:
-    s0 += xs[a+i]
+  for x in xs:
+    s0 += x
     permInplace(s0,s1,s2)
 
   # padding

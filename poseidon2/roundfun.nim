@@ -7,9 +7,6 @@ import ./roundconst
 
 #-------------------------------------------------------------------------------
 
-const zero* : F = getZero()
-const one*  : F = getOne()
-
 const externalRoundConst : array[24, F] = arrayFromHex( externalRoundConstStr )
 const internalRoundConst : array[56, F] = arrayFromHex( internalRoundConstStr )
 
