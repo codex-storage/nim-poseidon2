@@ -1,55 +1,15 @@
-import
-  constantine/math/arithmetic,
-  constantine/math/config/curves
+import constantine/math/arithmetic
 
 import poseidon2/types
-import poseidon2/roundconst
+import poseidon2/roundfun
 import poseidon2/io
 
 export toBytes
 
 #-------------------------------------------------------------------------------
 
-const zero : F = getZero()
-
-const externalRoundConst : array[24, F] = arrayFromHex( externalRoundConstStr )
-const internalRoundConst : array[56, F] = arrayFromHex( internalRoundConstStr )
-
-#-------------------------------------------------------------------------------
-
-# inplace sbox, x => x^5
-func sbox(x: var F) : void =
-  var y = x
-  square(y)
-  square(y)
-  x *= y
-
-func linearLayer(x, y, z : var F) =
-  var s = x ; s += y ; s += z
-  x += s
-  y += s
-  z += s
-
-func internalRound(j: int; x, y, z: var F) =
-  x += internalRoundConst[j]
-  sbox(x)
-  var s = x ; s += y ;  s += z
-  double(z)
-  x += s
-  y += s
-  z += s
-
-func externalRound(j: int; x, y, z : var F) =
-  x += externalRoundConst[3*j+0]
-  y += externalRoundConst[3*j+1]
-  z += externalRoundConst[3*j+2]
-  sbox(x) ; sbox(y) ; sbox(z)
-  var s = x ; s += y ; s += z
-  x += s
-  y += s
-  z += s
-
-func permInplace*(x, y, z : var F) =
+# the Poseidon2 permutation (mutable, in-place version)
+proc permInplace*(x, y, z : var F) =
   linearLayer(x, y, z);
   for j in 0..3:
     externalRound(j, x, y, z)
@@ -58,6 +18,7 @@ func permInplace*(x, y, z : var F) =
   for j in 4..7:
     externalRound(j, x, y, z)
 
+# the Poseidon2 permutation
 func perm*(xyz: S) : S =
   var (x,y,z) = xyz
   permInplace(x, y, z)
@@ -65,6 +26,56 @@ func perm*(xyz: S) : S =
 
 #-------------------------------------------------------------------------------
 
+# sponge with rate=1 (capacity=2) 
+func spongeWithRate1*(xs: openArray[F]) : F =
+  let a = low(xs)
+  let b = high(xs)
+  let n = b-a+1
+
+  var s0 : F = zero
+  var s1 : F = zero
+  var s2 : F = zero
+
+  for i in 0..<n:
+    s0 += xs[a+i]
+    permInplace(s0,s1,s2)
+
+  # padding
+  s0 += one;
+  permInplace(s0,s1,s2)
+  return s0
+
+# sponge with rate=2 (capacity=1) 
+func spongeWithRate2*(xs: openArray[F]) : F =
+  let a = low(xs)
+  let b = high(xs)
+  let n = b-a+1
+  let halfn  : int  = n div 2  
+
+  var s0 : F = zero
+  var s1 : F = zero
+  var s2 : F = zero
+
+  for i in 0..<halfn:
+    s0 += xs[a+2*i  ]
+    s1 += xs[a+2*i+1]
+    permInplace(s0,s1,s2)
+
+  if (2*halfn == n):
+    # padding even input
+    s0 += one
+    s1 += zero
+  else:
+    # padding odd input
+    s0 += xs[b]
+    s1 += one
+
+  permInplace(s0,s1,s2) 
+  return s0
+
+#-------------------------------------------------------------------------------
+
+# 2-to-1 compression
 func compress*(a, b : F) : F =
   var x = a
   var y = b
@@ -101,3 +112,5 @@ func merkleRoot*(xs: openArray[F]) : F =
 
 func merkleRoot*(bytes: openArray[byte]): F =
   merkleRoot(seq[F].fromBytes(bytes))
+
+#-------------------------------------------------------------------------------

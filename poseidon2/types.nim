@@ -1,8 +1,8 @@
 
 import
+  constantine/math/arithmetic,
   constantine/math/io/io_fields,
   constantine/math/io/io_bigints,
-  constantine/math/arithmetic,
   constantine/math/config/curves
 
 #-------------------------------------------------------------------------------
@@ -18,9 +18,17 @@ func getZero*() : F =
   setZero(z)
   return z
 
+func getOne*() : F = 
+  var y : F
+  # y.fromUint(1'u32)       # WTF, why does this not compile ???
+  y.fromHex("0x01")
+  return y
+
+# for some reason this one does not compile... ???
+# (when actually called)
 func toF*(a: int) : F =
   var y : F
-  fromInt(y, a);
+  y.fromInt(a)
   return y
 
 func hexToF*(s : string, endian: static Endianness = bigEndian) : F =
