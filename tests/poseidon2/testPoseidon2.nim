@@ -59,7 +59,6 @@ suite "poseidon2":
       for i in 1..n:
         xs.add( toF(i) )
       let h = spongeWithRate1(xs)
-      # echo(toDecimal(h))
       check toDecimal(h) == expectedSpongeResultsRate1[n] 
 
   test "sponge with rate=2":
@@ -68,7 +67,6 @@ suite "poseidon2":
       for i in 1..n:
         xs.add( toF(i) )
       let h = spongeWithRate2(xs)
-      # echo(toDecimal(h))
       check toDecimal(h) == expectedSpongeResultsRate2[n] 
 
   test "merkle root of field elements":
