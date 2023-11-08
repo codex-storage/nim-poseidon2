@@ -35,9 +35,9 @@ suite "poseidon2":
   test "merkle root of bytes":
     let bytes = toSeq 1'u8..80'u8
     let root = merkleRoot(bytes)
-    check root.toHex(littleEndian) == "0xa1dffa3f60d166283d60396023d95a1d7996d119e5290fe31131e7c6a7a27817"
+    check root.toHex(littleEndian) == "0x4f317667856aa66125dfa14c09096e08573803c91f87f20e2940238ede66a02d"
 
   test "merkle root of bytes converted to bytes":
     let bytes = toSeq 1'u8..80'u8
     let rootAsBytes = merkleRoot(bytes).toBytes()
-    check rootAsBytes.toHex == "0xa1dffa3f60d166283d60396023d95a1d7996d119e5290fe31131e7c6a7a27817"
+    check rootAsBytes.toHex == "0x4f317667856aa66125dfa14c09096e08573803c91f87f20e2940238ede66a02d"
