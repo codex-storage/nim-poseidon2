@@ -1,7 +1,6 @@
 import ./types
 import constantine/math/arithmetic
 import constantine/math/io/io_bigints
-import constantine/math/config/curves
 
 func fromBytes*(_: type F, bytes: openArray[byte]): F =
   ## Converts bytes into a field element. The byte array is interpreted as a
