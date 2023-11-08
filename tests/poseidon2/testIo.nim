@@ -27,7 +27,7 @@ suite "conversion to/from bytes":
     let expected1 = F.fromBig(B.unmarshal(padded[ 0..<31] & @[0'u8], littleEndian))
     let expected2 = F.fromBig(B.unmarshal(padded[31..<62] & @[0'u8], littleEndian))
     let expected3 = F.fromBig(B.unmarshal(padded[62..<93] & @[0'u8], littleEndian))
-    let elements = seq[F].fromBytes(bytes)
+    let elements = toSeq bytes.elements(F)
     check elements.len == 3
     check bool(elements[0] == expected1)
     check bool(elements[1] == expected2)

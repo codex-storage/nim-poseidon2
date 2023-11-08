@@ -1,3 +1,4 @@
+import std/sequtils
 import constantine/math/arithmetic
 
 import poseidon2/types
@@ -7,7 +8,7 @@ import poseidon2/sponge
 
 export sponge
 export toBytes
-
+export elements
 
 #-------------------------------------------------------------------------------
 
@@ -46,6 +47,6 @@ func merkleRoot*(xs: openArray[F]) : F =
     return merkleRoot(ys)
 
 func merkleRoot*(bytes: openArray[byte]): F =
-  merkleRoot(seq[F].fromBytes(bytes))
+  merkleRoot(toSeq bytes.elements(F))
 
 #-------------------------------------------------------------------------------

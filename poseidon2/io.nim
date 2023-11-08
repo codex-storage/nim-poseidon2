@@ -13,18 +13,16 @@ func fromBytes*(_: type F, bytes: openArray[byte]): F =
   let bigint = B.unmarshal(padded, littleEndian)
   return F.fromBig(bigint)
 
-func fromBytes*(_: type seq[F], bytes: openArray[byte]): seq[F] =
+iterator elements*(bytes: openArray[byte], _: type F): F =
   ## Converts bytes into field elements. The byte array is converted 31 bytes at
   ## a time with the `F.fromBytes()` function.
   const chunkLen = 31
-  var elements: seq[F]
   var chunkStart = 0
   while chunkStart < bytes.len:
     let chunkEnd = min(chunkStart + 31, bytes.len)
     let element = F.fromBytes(bytes.toOpenArray(chunkStart, chunkEnd - 1))
-    elements.add(element)
+    yield element
     chunkStart += chunkLen
-  return elements
 
 func toBytes*(element: F): array[32, byte] =
   ## Converts a field element into its canonical representation in little-endian
