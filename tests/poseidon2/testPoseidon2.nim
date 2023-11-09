@@ -33,12 +33,22 @@ suite "poseidon2":
     let root = merkleRoot(xs)
     check root.toHex(littleEndian) == "0xd1111b3515a663bb48278bfe453fe2508487014a1c6093d3ec5a6db764bbab1e"
 
+  test "merkle root of even elements":
+    let elements = toSeq(1..4).mapIt(toF(it))
+    let expected = compress(compress(1.toF, 2.toF), compress(3.toF, 4.toF))
+    check bool(merkleRoot(elements) == expected)
+
+  test "merkle root of odd elements":
+    let elements = toSeq(1..3).mapIt(toF(it))
+    let expected = compress(compress(1.toF, 2.toF), compress(3.toF, 0.toF))
+    check bool(merkleRoot(elements) == expected)
+
   test "merkle root of bytes":
     let bytes = toSeq 1'u8..80'u8
     let root = merkleRoot(bytes)
-    check root.toHex(littleEndian) == "0x00f5c12fabdf0fce1a69b9f0920f60e0c0ea4d8a880ae297559e0ad2276f2d2d"
+    check root.toHex(littleEndian) == "0xa1dffa3f60d166283d60396023d95a1d7996d119e5290fe31131e7c6a7a27817"
 
   test "merkle root of bytes converted to bytes":
     let bytes = toSeq 1'u8..80'u8
     let rootAsBytes = merkleRoot(bytes).toBytes()
-    check rootAsBytes.toHex == "0x00f5c12fabdf0fce1a69b9f0920f60e0c0ea4d8a880ae297559e0ad2276f2d2d"
+    check rootAsBytes.toHex == "0xa1dffa3f60d166283d60396023d95a1d7996d119e5290fe31131e7c6a7a27817"
