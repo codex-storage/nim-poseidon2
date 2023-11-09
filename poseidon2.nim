@@ -9,6 +9,7 @@ import poseidon2/sponge
 export sponge
 export toBytes
 export elements
+export types
 
 #-------------------------------------------------------------------------------
 

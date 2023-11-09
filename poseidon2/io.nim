@@ -1,6 +1,9 @@
 import ./types
 import constantine/math/arithmetic
 import constantine/math/io/io_bigints
+import constantine/math/config/curves
+
+export curves
 
 func fromOpenArray(_: type F, bytes: openArray[byte]): F =
   F.fromBig(B.unmarshal(bytes, littleEndian))

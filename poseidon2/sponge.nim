@@ -60,13 +60,13 @@ func init*(_: type Sponge, rate: static int = 2): Sponge[rate] =
     {.error: "only rate 1 and 2 are supported".}
   result.init
 
-func digest*(_: type Sponge, elements: openArray[F], rate: static int): F =
+func digest*(_: type Sponge, elements: openArray[F], rate: static int = 2): F =
   var sponge = Sponge.init(rate)
   for element in elements:
     sponge.update(element)
   return sponge.finish()
 
-func digest*(_: type Sponge, bytes: openArray[byte], rate: static int): F =
+func digest*(_: type Sponge, bytes: openArray[byte], rate: static int = 2): F =
   var sponge = Sponge.init(rate)
   for element in bytes.elements(F):
     sponge.update(element)
