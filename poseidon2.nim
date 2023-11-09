@@ -92,17 +92,16 @@ func merkleRoot*(xs: openArray[F]) : F =
     let n      : int  = 2*halfn
     let isOdd : bool = (n != m)
 
-    var ys : seq[F] = newSeq[F](halfn)
-
+    var ys : seq[F]
     if not isOdd:
-      for i in 0..<halfn:
-        ys[i] = compress( xs[a+2*i], xs[a+2*i+1] )
-
+      ys = newSeq[F](halfn)
     else:
-      for i in 0..<halfn-1:
-        ys[i] = compress( xs[a+2*i], xs[a+2*i+1] )
-      # and the last one:
-      ys[halfn-1] = compress( xs[a+n-2], zero )
+      ys = newSeq[F](halfn+1)
+
+    for i in 0..<halfn:
+      ys[i] = compress( xs[a+2*i], xs[a+2*i+1] )
+    if isOdd:
+      ys[halfn] = compress( xs[n], zero )
 
     return merkleRoot(ys)
 
