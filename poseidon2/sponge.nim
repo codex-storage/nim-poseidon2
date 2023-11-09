@@ -65,3 +65,9 @@ func digest*(_: type Sponge, elements: openArray[F], rate: static int): F =
   for element in elements:
     sponge.update(element)
   return sponge.finish()
+
+func digest*(_: type Sponge, bytes: openArray[byte], rate: static int): F =
+  var sponge = Sponge.init(rate)
+  for element in bytes.elements(F):
+    sponge.update(element)
+  return sponge.finish()

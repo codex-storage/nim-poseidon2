@@ -1,6 +1,8 @@
 import std/unittest
+import std/sequtils
 
 import constantine/math/io/io_fields
+import constantine/math/arithmetic
 
 import poseidon2/types
 import poseidon2
@@ -48,3 +50,9 @@ suite "sponge":
         xs.add( toF(i) )
       let h = Sponge.digest(xs, rate = 2)
       check toDecimal(h) == expectedSpongeResultsRate2[n]
+
+  test "sponge with byte array as input":
+    let bytes = toSeq 1'u8..80'u8
+    let elements = toSeq bytes.elements(F)
+    let expected = Sponge.digest(elements, rate = 2)
+    check bool(Sponge.digest(bytes, rate = 2) == expected)
