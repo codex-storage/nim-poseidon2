@@ -14,6 +14,9 @@ import poseidon2/merkle
 
 suite "merkle root":
 
+  const isBottomLayer = 1
+  const isOddNode = 2
+
   test "merkle root of field elements":
     let m = 17
     let n = 2^m
@@ -22,24 +25,35 @@ suite "merkle root":
       xs.add( toF(i) )
 
     let root = merkleRoot(xs)
-    check root.toHex(littleEndian) == "0xd1111b3515a663bb48278bfe453fe2508487014a1c6093d3ec5a6db764bbab1e"
+    check root.toHex(littleEndian) == "0x593e01f200cb1aee4e75fe2a9206abc3abd2a1216ab75f1061965e97371e8623"
 
   test "merkle root of even elements":
     let elements = toSeq(1..4).mapIt(toF(it))
-    let expected = compress(compress(1.toF, 2.toF), compress(3.toF, 4.toF))
+    let expected = compress(
+      compress(1.toF, 2.toF, key = isBottomLayer.toF),
+      compress(3.toF, 4.toF, key = isBottomLayer.toF),
+    )
     check bool(merkleRoot(elements) == expected)
 
   test "merkle root of odd elements":
     let elements = toSeq(1..3).mapIt(toF(it))
-    let expected = compress(compress(1.toF, 2.toF), compress(3.toF, 0.toF))
+    let expected = compress(
+      compress(1.toF, 2.toF, key = isBottomLayer.toF),
+      compress(3.toF, 0.toF, key = (isBottomLayer + isOddNode).toF)
+    )
     check bool(merkleRoot(elements) == expected)
+
+  test "data ending with 0 differs from padded data":
+    let a = toSeq(1..3).mapIt(it.toF)
+    let b = a & @[0.toF]
+    check not bool(merkleRoot(a) == merkleRoot(b))
 
   test "merkle root of bytes":
     let bytes = toSeq 1'u8..80'u8
     let root = merkleRoot(bytes)
-    check root.toHex(littleEndian) == "0x4f317667856aa66125dfa14c09096e08573803c91f87f20e2940238ede66a02d"
+    check root.toHex(littleEndian) == "0x40989b63104f39e3331767883381085bcfc46e2202679123371f1ffe53521b16"
 
   test "merkle root of bytes converted to bytes":
     let bytes = toSeq 1'u8..80'u8
     let rootAsBytes = merkleRoot(bytes).toBytes()
-    check rootAsBytes.toHex == "0x4f317667856aa66125dfa14c09096e08573803c91f87f20e2940238ede66a02d"
+    check rootAsBytes.toHex == "0x40989b63104f39e3331767883381085bcfc46e2202679123371f1ffe53521b16"
