@@ -8,9 +8,11 @@ import constantine/math/io/io_bigints
 import constantine/serialization/codecs
 
 import poseidon2/types
-import poseidon2
+import poseidon2/io
+import poseidon2/compress
+import poseidon2/merkle
 
-suite "poseidon2":
+suite "merkle root":
 
   test "merkle root of field elements":
     let m = 17
