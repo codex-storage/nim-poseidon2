@@ -10,7 +10,7 @@ const KeyBottomLayer = F.fromHex("0x1")
 const KeyOdd = F.fromHex("0x2")
 const KeyOddAndBottomLayer = F.fromhex("0x3")
 
-func merkleRoot*(xs: openArray[F], isBottomLayer: static bool = true) : F =
+func merkleRoot(xs: openArray[F], isBottomLayer: static bool) : F =
   let a = low(xs)
   let b = high(xs)
   let m = b-a+1
@@ -37,6 +37,9 @@ func merkleRoot*(xs: openArray[F], isBottomLayer: static bool = true) : F =
       ys[halfn] = compress( xs[n], zero, key = key )
 
     return merkleRoot(ys, isBottomLayer = false)
+
+func merkleRoot*(xs: openArray[F]) : F =
+  merkleRoot(xs, isBottomLayer = true)
 
 func merkleRoot*(bytes: openArray[byte]): F =
   merkleRoot(toSeq bytes.elements(F))
