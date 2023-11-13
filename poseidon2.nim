@@ -5,21 +5,15 @@ import poseidon2/types
 import poseidon2/permutation
 import poseidon2/io
 import poseidon2/sponge
+import poseidon2/compress
 
 export sponge
+export compress
 export toBytes
 export elements
 export types
 
 #-------------------------------------------------------------------------------
-
-# 2-to-1 compression
-func compress*(a, b : F) : F =
-  var x = a
-  var y = b
-  var z : F ; setZero(z)
-  permInplace(x, y, z)
-  return x
 
 func merkleRoot*(xs: openArray[F]) : F =
   let a = low(xs)
