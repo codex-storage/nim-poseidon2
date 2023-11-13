@@ -15,7 +15,7 @@ func merkleRoot*(xs: openArray[F], isBottomLayer: static bool = true) : F =
   let b = high(xs)
   let m = b-a+1
 
-  if m==1:
+  if m==1 and not isBottomLayer:
     return xs[a]
 
   else:

@@ -48,6 +48,14 @@ suite "merkle root":
     let b = a & @[0.toF]
     check not bool(merkleRoot(a) == merkleRoot(b))
 
+  test "merkle root of single element does not equal the element":
+    check not bool(merkleRoot([1.toF]) == 1.toF)
+
+  test "merkle root differs from merkle root of merkle root":
+    let a = 1.toF
+    let b = 2.toF
+    check not bool(merkleRoot([a, b]) == merkleRoot([merkleRoot([a, b])]))
+
   test "merkle root of bytes":
     let bytes = toSeq 1'u8..80'u8
     let root = merkleRoot(bytes)
