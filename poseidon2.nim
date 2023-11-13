@@ -10,7 +10,7 @@ export toBytes
 
 # the Poseidon2 permutation (mutable, in-place version)
 proc permInplace*(x, y, z : var F) =
-  linearLayer(x, y, z);
+  linearLayer(x, y, z)
   for j in 0..3:
     externalRound(j, x, y, z)
   for j in 0..55:
@@ -26,12 +26,8 @@ func perm*(xyz: S) : S =
 
 #-------------------------------------------------------------------------------
 
-# sponge with rate=1 (capacity=2) 
+# sponge with rate=1 (capacity=2)
 func spongeWithRate1*(xs: openArray[F]) : F =
-  let a = low(xs)
-  let b = high(xs)
-  let n = b-a+1
-
   var s0 : F = zero
   var s1 : F = zero
   var s2 : F = toF(0x0301) ; s2 += twoToThe64        # domain separation IV := (2^64 + 256*t + r)
@@ -41,16 +37,16 @@ func spongeWithRate1*(xs: openArray[F]) : F =
     permInplace(s0,s1,s2)
 
   # padding
-  s0 += one;
+  s0 += one
   permInplace(s0,s1,s2)
   return s0
 
-# sponge with rate=2 (capacity=1) 
+# sponge with rate=2 (capacity=1)
 func spongeWithRate2*(xs: openArray[F]) : F =
   let a = low(xs)
   let b = high(xs)
   let n = b-a+1
-  let halfn  : int  = n div 2  
+  let halfn  : int  = n div 2
 
   var s0 : F = zero
   var s1 : F = zero
@@ -70,7 +66,7 @@ func spongeWithRate2*(xs: openArray[F]) : F =
     s0 += xs[b]
     s1 += one
 
-  permInplace(s0,s1,s2) 
+  permInplace(s0,s1,s2)
   return s0
 
 #-------------------------------------------------------------------------------
