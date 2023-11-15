@@ -1,5 +1,6 @@
 import ./types
 import ./permutation
+import ./io
 import constantine/math/io/io_fields
 import constantine/math/arithmetic
 
