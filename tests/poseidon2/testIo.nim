@@ -32,6 +32,14 @@ suite "conversion to/from bytes":
     let elements = toSeq bytes.elements(F)
     check bool(elements[^1] == expected)
 
+  test "converts empty sequence of bytes to single field element":
+    let bytes = seq[byte].default
+    let marker = @[1'u8]
+    let expected = F.fromBytes(marker.toArray)
+    let elements = toSeq bytes.elements(F)
+    check elements.len == 1
+    check bool(elements[0] == expected)
+
   test "conversion from bytes pads the last chunk when it's less than 31 bytes":
     let bytes = toSeq 1'u8..80'u8
     let marker = @[1'u8]

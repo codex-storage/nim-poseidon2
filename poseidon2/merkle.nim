@@ -15,6 +15,9 @@ func merkleRoot(xs: openArray[F], isBottomLayer: static bool) : F =
   let b = high(xs)
   let m = b-a+1
 
+  when isBottomLayer:
+    assert m > 0, "merkle root of empty sequence is not defined"
+
   when not isBottomLayer:
     if m==1:
       return xs[a]

@@ -65,3 +65,13 @@ suite "merkle root":
     let bytes = toSeq 1'u8..80'u8
     let rootAsBytes = merkleRoot(bytes).toBytes()
     check rootAsBytes.toHex == "0x40989b63104f39e3331767883381085bcfc46e2202679123371f1ffe53521b16"
+
+  test "merkle root of empty sequence of elements":
+    let empty = seq[F].default
+    expect Exception:
+      discard merkleRoot(empty)
+
+  test "merkle root of empty sequency of bytes":
+    # merkle root of empty sequence of bytes is uniquely defined through padding
+    let empty = seq[byte].default
+    check merkleRoot(empty).toBytes.toHex == "0xcc8da1d157900e611b89e258d95450e707f4f9eec169422d7c26aba54f803c08"
