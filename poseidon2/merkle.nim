@@ -1,4 +1,3 @@
-import std/sequtils
 import constantine/math/arithmetic
 import constantine/math/io/io_fields
 import ./types
@@ -10,39 +9,57 @@ const KeyBottomLayer = F.fromHex("0x1")
 const KeyOdd = F.fromHex("0x2")
 const KeyOddAndBottomLayer = F.fromhex("0x3")
 
-func merkleRoot(xs: openArray[F], isBottomLayer: static bool) : F =
-  let a = low(xs)
-  let b = high(xs)
-  let m = b-a+1
+type Merkle* = object
+  todo: seq[F] # nodes that haven't been combined yet
+  width: int # width of the current subtree
+  leafs: int # amount of leafs processed
 
-  when isBottomLayer:
-    assert m > 0, "merkle root of empty sequence is not defined"
+func init*(_: type Merkle): Merkle =
+  Merkle(width: 2)
 
-  when not isBottomLayer:
-    if m==1:
-      return xs[a]
-
-  let halfn  : int  = m div 2
-  let n      : int  = 2*halfn
-  let isOdd : bool = (n != m)
-
-  var ys : seq[F]
-  if not isOdd:
-    ys = newSeq[F](halfn)
+func compress(merkle: var Merkle, odd: static bool) =
+  when odd:
+    let a = merkle.todo.pop()
+    let b = zero
+    let key = if merkle.width == 2: KeyOddAndBottomLayer else: KeyOdd
+    merkle.todo.add(compress(a, b, key = key))
+    merkle.leafs += merkle.width div 2 # zero node represents this many leafs
   else:
-    ys = newSeq[F](halfn+1)
+    let b = merkle.todo.pop()
+    let a = merkle.todo.pop()
+    let key = if merkle.width == 2: KeyBottomLayer else: KeyNone
+    merkle.todo.add(compress(a, b, key = key))
+  merkle.width *= 2
 
-  for i in 0..<halfn:
-    const key = when isBottomLayer: KeyBottomLayer else: KeyNone
-    ys[i] = compress( xs[a+2*i], xs[a+2*i+1], key = key )
-  if isOdd:
-    const key = when isBottomLayer: KeyOddAndBottomLayer else: KeyOdd
-    ys[halfn] = compress( xs[n], zero, key = key )
+func update*(merkle: var Merkle, element: F) =
+  merkle.todo.add(element)
+  inc merkle.leafs
+  merkle.width = 2
+  while merkle.width <= merkle.leafs and merkle.leafs mod merkle.width == 0:
+    merkle.compress(odd = false)
 
-  return merkleRoot(ys, isBottomLayer = false)
+func finish*(merkle: var Merkle): F =
+  assert merkle.todo.len > 0, "merkle root of empty sequence is not defined"
 
-func merkleRoot*(xs: openArray[F]) : F =
-  merkleRoot(xs, isBottomLayer = true)
+  if merkle.leafs == 1:
+    merkle.compress(odd = true)
 
-func merkleRoot*(bytes: openArray[byte]): F =
-  merkleRoot(toSeq bytes.elements(F))
+  while merkle.todo.len > 1:
+    if merkle.leafs mod merkle.width == 0:
+      merkle.compress(odd = false)
+    else:
+      merkle.compress(odd = true)
+
+  return merkle.todo[0]
+
+func digest*(_: type Merkle, elements: openArray[F]): F =
+  var merkle = Merkle.init()
+  for element in elements:
+    merkle.update(element)
+  return merkle.finish()
+
+func digest*(_: type Merkle, bytes: openArray[byte]): F =
+  var merkle = Merkle.init()
+  for element in bytes.elements(F):
+    merkle.update(element)
+  return merkle.finish()
