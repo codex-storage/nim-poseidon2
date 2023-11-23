@@ -38,7 +38,8 @@ iterator elements*(bytes: openArray[byte], _: type F): F =
   yield finalElement
 
 # Remark: since `fromInt()` does not work at compile time, this doesn't either
-func toF*(a: int) : F =
-  var y : F
-  y.fromInt(a)
-  return y
+func toF*(a: SomeInteger | SomeUnsignedInt) : F =
+  when a is SomeInteger:
+    fromInt(result, a)
+  else:
+    fromUInt(result, a)

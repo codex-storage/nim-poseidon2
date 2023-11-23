@@ -1,6 +1,7 @@
 import std/unittest
 import std/sequtils
 import constantine/math/io/io_bigints
+import constantine/math/io/io_fields
 import constantine/math/arithmetic
 import poseidon2/types
 import poseidon2/io
@@ -54,3 +55,29 @@ suite "conversion to/from bytes":
     var expected: array[32, byte]
     marshal(expected, element.toBig(), littleEndian)
     check element.toBytes() == expected
+
+suite "conversion from integers":
+
+  test "converts unsigned integers to a field element":
+
+    proc checkConversion[I](integer: I) =
+      var expected: F
+      fromUint(expected, integer)
+      check bool(integer.toF == expected)
+
+    checkConversion(0x11'u8)
+    checkConversion(0x1122'u16)
+    checkConversion(0x11223344'u32)
+    checkConversion(0x1122334455667788'u64)
+
+  test "converts signed integers to a field element":
+
+    proc checkConversion[I](integer: I) =
+      var expected: F
+      fromInt(expected, integer)
+      check bool(integer.toF == expected)
+
+    checkConversion(0x11'i8)
+    checkConversion(0x1122'i16)
+    checkConversion(0x11223344'i32)
+    checkConversion(0x1122334455667788'i64)
