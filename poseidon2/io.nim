@@ -1,6 +1,7 @@
 import ./types
 import constantine/math/arithmetic
 import constantine/math/io/io_bigints
+import constantine/math/io/io_fields
 import constantine/math/config/curves
 
 export curves
@@ -35,3 +36,9 @@ iterator elements*(bytes: openArray[byte], _: type F): F =
   let finalChunk = bytes[chunkStart..<bytes.len] & endMarker
   let finalElement = F.fromOpenArray(finalChunk)
   yield finalElement
+
+# Remark: since `fromInt()` does not work at compile time, this doesn't either
+func toF*(a: int) : F =
+  var y : F
+  y.fromInt(a)
+  return y

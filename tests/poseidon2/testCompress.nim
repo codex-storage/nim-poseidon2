@@ -1,6 +1,6 @@
 import std/unittest
 import constantine/math/arithmetic
-import poseidon2/types
+import poseidon2/io
 import poseidon2/permutation
 import poseidon2/compress
 
