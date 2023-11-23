@@ -2,6 +2,7 @@ import std/unittest
 import std/math
 import std/sequtils
 import std/sugar
+import std/random
 
 import constantine/math/arithmetic
 import constantine/math/io/io_fields
@@ -12,6 +13,9 @@ import poseidon2/types
 import poseidon2/io
 import poseidon2/compress
 import poseidon2/merkle
+
+import ./fuzzing
+import ./reference
 
 suite "merkle root":
 
@@ -219,3 +223,22 @@ suite "merkle root test vectors":
       let input = collect(newSeq, (for i in 1..n: byte(i)))
       let root = Merkle.digest(input)
       check root.toDecimal == expected[n]
+
+suite "merkle root fuzzing (seed: " & $fuzzing.seed & ")":
+
+  test "merkle root algorithm matches reference implementation":
+
+    proc checkInput(input: seq[byte]) =
+      let expected = reference.merkleRoot(input)
+      check bool(Merkle.digest(input) == expected)
+
+    # a couple of tests with small input
+    for _ in 0..<1000:
+      let len = rand(1024)
+      let input = newSeqwith(len, byte.rand())
+      checkInput(input)
+
+    # one test with larger input
+    let len = rand(1024 * 1024)
+    let input = newSeqwith(len, byte.rand())
+    checkInput(input)
