@@ -8,5 +8,6 @@ export sponge
 export compress
 export merkle
 export toBytes
+export toF
 export elements
 export types

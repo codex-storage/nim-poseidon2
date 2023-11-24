@@ -18,12 +18,6 @@ func getZero*() : F =
   setZero(z)
   return z
 
-# Remark: since `fromInt()` does not work at compile time, this doesn't either
-func toF*(a: int) : F =
-  var y : F
-  y.fromInt(a)
-  return y
-
 #-------------------------------------------------------------------------------
 
 const zero* : F = getZero()
