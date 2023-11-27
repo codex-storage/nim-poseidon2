@@ -13,3 +13,7 @@ export toBytes
 export toF
 export elements
 export types
+
+# workaround for "undeclared identifier: 'getCurveOrder'"
+import constantine/math/config/curves
+export curves
