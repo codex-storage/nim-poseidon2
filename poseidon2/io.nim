@@ -27,13 +27,14 @@ iterator elements*(bytes: openArray[byte], _: type F): F =
   ## sequences that end with 0x0's.
   const chunkLen = 31
   const endMarker = @[1'u8]
+  let empty = bytes.len == 0
   var chunkStart = 0
   while chunkStart + chunkLen <= bytes.len:
     let chunkEnd = chunkStart + chunkLen - 1
     let element = F.fromOpenArray(bytes.toOpenArray(chunkStart, chunkEnd))
     yield element
     chunkStart += chunkLen
-  if bytes.len - chunkStart > 0:
+  if (bytes.len - chunkStart > 0) or empty:
     let finalChunk = bytes[chunkStart..<bytes.len] & endMarker
     let finalElement = F.fromOpenArray(finalChunk)
     yield finalElement
