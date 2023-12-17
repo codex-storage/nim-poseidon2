@@ -33,9 +33,10 @@ iterator elements*(bytes: openArray[byte], _: type F): F =
     let element = F.fromOpenArray(bytes.toOpenArray(chunkStart, chunkEnd))
     yield element
     chunkStart += chunkLen
-  let finalChunk = bytes[chunkStart..<bytes.len] & endMarker
-  let finalElement = F.fromOpenArray(finalChunk)
-  yield finalElement
+  if bytes.len - chunkStart > 0:
+    let finalChunk = bytes[chunkStart..<bytes.len] & endMarker
+    let finalElement = F.fromOpenArray(finalChunk)
+    yield finalElement
 
 # Remark: since `fromInt()` does not work at compile time, this doesn't either
 func toF*(a: SomeInteger | SomeUnsignedInt) : F =
