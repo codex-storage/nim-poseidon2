@@ -27,11 +27,26 @@ suite "conversion to/from bytes":
     check bool(elements[1] == expected2)
 
   test "conversion from bytes adds 0x1 as an end marker":
-    let bytes = toSeq 1'u8..62'u8
-    let marker = @[1'u8]
+    let bytes = toSeq 1'u8..32'u8
+    let marker = @[32'u8, 1'u8]
     let expected = F.fromBytes(marker.toArray)
     let elements = toSeq bytes.elements(F)
     check bool(elements[^1] == expected)
+
+  test "conversion from two distinct zero sequences adds 0x1 as an end marker":
+    let bytes1 = newSeq[byte](1)
+    let bytes2 = newSeq[byte](2)
+    let marker1 = @[0'u8, 1'u8]
+    let marker2 = @[0'u8, 0'u8, 1'u8]
+    let expected1 = F.fromBytes(marker1.toArray)
+    let expected2 = F.fromBytes(marker2.toArray)
+    let elements1 = toSeq bytes1.elements(F)
+    let elements2 = toSeq bytes2.elements(F)
+
+    check:
+      not bool(elements1[0] == elements2[0])
+      bool(elements1[^1] == expected1)
+      bool(elements2[^1] == expected2)
 
   test "converts empty sequence of bytes to single field element":
     let bytes = seq[byte].default
