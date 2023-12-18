@@ -6,5 +6,5 @@ func compress*(a, b : F, key = zero) : F =
   var x = a
   var y = b
   var z = key
-  permInplace(x, y, z)
+  permInPlace(x, y, z)
   return x
