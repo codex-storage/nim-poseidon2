@@ -18,6 +18,18 @@ suite "conversion to/from bytes":
     let unmarshalled = F.fromBytes(bytes)
     check bool(unmarshalled == expected)
 
+  test "converts 32 little endian bytes into a field elements":
+    let bytes = toArray toSeq 1'u8..32'u8
+    let expected = F.fromBig(B.unmarshal(bytes, littleEndian))
+    let unmarshalled = F.fromBytes(bytes).get()
+    check bool(unmarshalled == expected)
+
+  test "convert fails for 32 little endian bytes larger than the prime field":
+    let bytes = toArray toSeq(255'u8).repeat(32)
+    let expected = F.fromBig(B.unmarshal(bytes, littleEndian))
+    let unmarshalled = F.fromBytes(bytes)
+    check not unmarshalled.isSome()
+
   test "converts every 31 bytes into a field element":
     let bytes = toSeq 1'u8..62'u8
     let expected1 = F.fromBytes(bytes[0..<31].toArray)
