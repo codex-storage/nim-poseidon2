@@ -42,6 +42,13 @@ suite "conversion to/from bytes":
     check bool(elements[0] == expected1)
     check bool(elements[1] == expected2)
 
+  test "conversion preserves field element":
+    let
+      expected = toF(1234)
+      bytes = expected.toBytes()
+      actual = F.fromBytes(bytes).get()
+    check bool(expected == actual)
+
   test "conversion from bytes adds 0x1 as an end marker":
     let bytes = toSeq 1'u8..62'u8
     let marker = @[1'u8]
