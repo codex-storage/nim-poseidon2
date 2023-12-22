@@ -1,5 +1,6 @@
 import std/unittest
 import std/sequtils
+import std/options
 import constantine/math/io/io_bigints
 import constantine/math/io/io_fields
 import constantine/math/arithmetic
@@ -11,6 +12,9 @@ suite "conversion to/from bytes":
   func toArray(bytes: openArray[byte]): array[31, byte] =
     result[0..<bytes.len] = bytes[0..<bytes.len]
 
+  func toArray32(bytes: openArray[byte]): array[32, byte] =
+    result[0..<bytes.len] = bytes[0..<bytes.len]
+
   test "converts 31 little endian bytes into a field elements":
     let bytes = toArray toSeq 1'u8..31'u8
     let paddedTo32 = @bytes & @[0'u8] # most significant byte is not used
@@ -19,13 +23,13 @@ suite "conversion to/from bytes":
     check bool(unmarshalled == expected)
 
   test "converts 32 little endian bytes into a field elements":
-    let bytes = toArray toSeq 1'u8..32'u8
+    let bytes = toArray32(toSeq 1'u8..32'u8)
     let expected = F.fromBig(B.unmarshal(bytes, littleEndian))
     let unmarshalled = F.fromBytes(bytes).get()
     check bool(unmarshalled == expected)
 
   test "convert fails for 32 little endian bytes larger than the prime field":
-    let bytes = toArray toSeq(255'u8).repeat(32)
+    let bytes = toArray32(toSeq((255'u8).repeat(32)))
     let expected = F.fromBig(B.unmarshal(bytes, littleEndian))
     let unmarshalled = F.fromBytes(bytes)
     check not unmarshalled.isSome()
