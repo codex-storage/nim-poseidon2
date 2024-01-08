@@ -2,7 +2,7 @@ import ./types
 import ./roundfun
 
 # the Poseidon2 permutation (mutable, in-place version)
-proc permInplace*(x, y, z : var F) =
+proc permInPlace*(x, y, z : var F) =
   linearLayer(x, y, z)
   for j in 0..3:
     externalRound(j, x, y, z)
@@ -14,5 +14,5 @@ proc permInplace*(x, y, z : var F) =
 # the Poseidon2 permutation
 func perm*(xyz: S) : S =
   var (x,y,z) = xyz
-  permInplace(x, y, z)
+  permInPlace(x, y, z)
   return (x,y,z)
