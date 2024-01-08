@@ -38,3 +38,6 @@ func arrayFromHex*[N](
   for i in low(inp)..high(inp):
     tmp[i] = hexToF(inp[i], endian)
   return tmp
+
+func `==`*(a, b: F): bool =
+  bool(arithmetic.`==`(a, b))
