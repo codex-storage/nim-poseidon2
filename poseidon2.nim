@@ -9,6 +9,7 @@ export sponge
 export compress
 export merkle
 export spongemerkle
+export fromBytes
 export toBytes
 export toF
 export elements
