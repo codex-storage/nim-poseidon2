@@ -15,6 +15,6 @@ export toF
 export elements
 export types
 
-# workaround for "undeclared identifier: 'getCurveOrder'"
-import constantine/math/config/curves
-export curves
+# workaround for "undeclared identifier: 'getModulus'"
+import constantine/named/algebras
+export algebras

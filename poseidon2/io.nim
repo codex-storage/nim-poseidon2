@@ -2,10 +2,10 @@ import std/options
 import constantine/math/arithmetic
 import constantine/math/io/io_bigints
 import constantine/math/io/io_fields
-import constantine/math/config/curves
+import constantine/named/algebras
 import ./types
 
-export curves
+export algebras
 
 func fromOpenArray(_: type F, bytes: openArray[byte]): F =
   F.fromBig(B.unmarshal(bytes, littleEndian))
@@ -19,7 +19,7 @@ func fromBytes*(_: type F, bytes: array[32, byte]): Option[F] =
   ## Converts bytes into a field element. The byte array is interpreted as a
   ## canonical little-endian big integer.
   let big = B.unmarshal(bytes, littleEndian)
-  if bool(big < F.fieldMod()):
+  if bool(big < F.getModulus()):
     return some(F.fromBig(big))
 
 func toBytes*(element: F): array[32, byte] =

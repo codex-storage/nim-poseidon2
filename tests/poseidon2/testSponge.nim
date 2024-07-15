@@ -2,7 +2,6 @@ import std/unittest
 import std/sequtils
 
 import constantine/math/io/io_fields
-import constantine/math/arithmetic
 
 import poseidon2/types
 import poseidon2/io
