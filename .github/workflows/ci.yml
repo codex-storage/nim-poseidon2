@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        nim: [1.6.14]
+        nim: [stable, 1.6.20]
     steps:
     - uses: actions/checkout@v2
-    - uses: iffy/install-nim@v3
+    - uses: iffy/install-nim@v5
       with:
         version: ${{ matrix.nim }}
     - name: Build
