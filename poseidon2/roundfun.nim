@@ -1,6 +1,6 @@
 import
   constantine/math/arithmetic,
-  constantine/math/config/curves
+  constantine/named/algebras
 
 import ./types
 import ./roundconst
