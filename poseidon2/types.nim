@@ -3,12 +3,12 @@ import
   constantine/math/arithmetic,
   constantine/math/io/io_fields,
   constantine/math/io/io_bigints,
-  constantine/math/config/curves
+  constantine/named/algebras
 
 #-------------------------------------------------------------------------------
 
 type B* = BigInt[254]
-type F* = Fr[BN254Snarks]
+type F* = Fr[BN254_Snarks]
 type S* = (F,F,F)
 
 #-------------------------------------------------------------------------------
