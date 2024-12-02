@@ -3,4 +3,4 @@ author = "nim-poseidon2 authors"
 description = "Poseidon2 hash function"
 license = "MIT"
 
-requires "https://github.com/mratsim/constantine#1e34ec22929eaba7bcf1681350ec21aed8f370f7"
+requires "https://github.com/mratsim/constantine#bc3845aa492b52f7fef047503b1592e830d1a774"

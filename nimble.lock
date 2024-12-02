@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "packages": {
+    "constantine": {
+      "version": "0.1.0",
+      "vcsRevision": "bc3845aa492b52f7fef047503b1592e830d1a774",
+      "url": "https://github.com/mratsim/constantine",
+      "downloadMethod": "git",
+      "dependencies": [],
+      "checksums": {
+        "sha1": "09594d4ce93e83ae377a7a9cb8fd4472b104ca4b"
+      }
+    }
+  },
+  "tasks": {}
+}
